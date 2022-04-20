@@ -35,6 +35,7 @@ def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[f
     # will have no effect.
     np.clip(errors, -U, U, out=errors)
     U = U ** 2
+    errors = errors ** 2
     sqe_sum = errors.sum()
     n = len(errors)
     rmse = np.sqrt(sqe_sum / n)
@@ -46,8 +47,8 @@ def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[f
         smallest = errors[k - 1]
         prefix_sum -= largest # implicitly replace largest by 0)
         suffix_sum -= smallest
-        prefix_local_sens = _local_sensitivity(largest, 0, prefix_sum, n, U)
-        suffix_local_sens = _local_sensitivity(smallest, U, suffix_sum, n, U)
+        prefix_local_sens = _local_sensitivity(largest, 0, prefix_sum, n)
+        suffix_local_sens = _local_sensitivity(smallest, U, suffix_sum, n)
         local_sens = max(prefix_local_sens, suffix_local_sens)
         smooth_sens = max(smooth_sens, local_sens * np.exp(-beta * k))
         suffix_sum += U # replace smallest by U, but only after calculation
@@ -61,10 +62,9 @@ def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[f
 # * @param substitute the replacement for x.
 # * @param s the sum of the squared errors, but *without* x.
 # * @param n the number of squared error (terms) in s, plus 1 for x.
-# * @param U the upper bound of the squared errors terms in s, and x.
 # * @return double The local sensitivity of the root mean squared error function.
 # */
-def _local_sensitivity(x: float, substitute: float, s: float, n: int, U: float) -> float:
+def _local_sensitivity(x: float, substitute: float, s: float, n: int) -> float:
     s = max(s, 1e-12) # to avoid division by zero
     sens = np.sqrt(s / n) * np.abs(np.sqrt(1 + x / s) - np.sqrt(1 + substitute / s))
     return sens
