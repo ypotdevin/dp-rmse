@@ -6,7 +6,7 @@ import pandas as pd
 import dp_rmse
 
 
-def params_generator(rng: np.random.Generator):
+def params_generator():
     sample_sizes = [1, 10, 100, 1000, 10000]
     locations = [1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6]
 
