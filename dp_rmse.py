@@ -1,6 +1,6 @@
 import numpy as np
 
-#/**
+# /**
 # * @param errors The errors (differences) to apply the root mean squared error
 # * function on.
 # * @param epsilon The privacy budget.
@@ -9,7 +9,7 @@ import numpy as np
 # * Cauchy distribution.
 # * @return double The epsilon-differentially private rMSE estimate of errors.
 # */
-def dp_rms_cauchy(errors: np.ndarray, epsilon: float, U: float, rng = None) -> float:
+def dp_rms_cauchy(errors: np.ndarray, epsilon: float, U: float, rng=None) -> float:
     if rng is None:
         rng = np.random.default_rng()
     sorted_errors = np.sort(errors)
@@ -20,7 +20,8 @@ def dp_rms_cauchy(errors: np.ndarray, epsilon: float, U: float, rng = None) -> f
     dp_rmse = rmse + 2 * (gamma + 1) * sens * noise / epsilon
     return dp_rmse
 
-#/**
+
+# /**
 # * @param errors The precomputed errors (to avoid having two arguments which
 # * then have to be subtracted), sorted ascendingly.
 # * @param beta The beta defining the beta-smooth sensitivity.
@@ -30,7 +31,9 @@ def dp_rms_cauchy(errors: np.ndarray, epsilon: float, U: float, rng = None) -> f
 # *
 # *     e_1, ..., e_n |-> sqrt((e_1 ** 2 + ... + e_n ** 2) / n).
 # */
-def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[float, float]:
+def rMS_smooth_sensitivity(
+    errors: np.ndarray, beta: float, U: float
+) -> tuple[float, float]:
     # If U is chosen well, i.e. a true upper bound on the errors, the clipping
     # will have no effect.
     np.clip(errors, -U, U, out=errors)
@@ -45,16 +48,17 @@ def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[f
     for k in range(1, n + 1):
         largest = errors[n - k]
         smallest = errors[k - 1]
-        prefix_sum -= largest # implicitly replace largest by 0)
+        prefix_sum -= largest  # implicitly replace largest by 0)
         suffix_sum -= smallest
         prefix_local_sens = _local_sensitivity(largest, 0, prefix_sum, n)
         suffix_local_sens = _local_sensitivity(smallest, U, suffix_sum, n)
         local_sens = max(prefix_local_sens, suffix_local_sens)
         smooth_sens = max(smooth_sens, local_sens * np.exp(-beta * k))
-        suffix_sum += U # replace smallest by U, but only after calculation
+        suffix_sum += U  # replace smallest by U, but only after calculation
     return (smooth_sens, rmse)
 
-#/**
+
+# /**
 # * @brief The local sensitivity of the rMSE function, already operating on the
 # * vector of differences (not on two vectors which then will be subtracted).
 # *
@@ -65,6 +69,6 @@ def rMS_smooth_sensitivity(errors: np.ndarray, beta: float, U: float) -> tuple[f
 # * @return double The local sensitivity of the root mean squared error function.
 # */
 def _local_sensitivity(x: float, substitute: float, s: float, n: int) -> float:
-    s = max(s, 1e-12) # to avoid division by zero
+    s = max(s, 1e-12)  # to avoid division by zero
     sens = np.sqrt(s / n) * np.abs(np.sqrt(1 + x / s) - np.sqrt(1 + substitute / s))
     return sens
