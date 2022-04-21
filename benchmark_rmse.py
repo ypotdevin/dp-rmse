@@ -45,15 +45,20 @@ def _loc_scale(loc_scale_dist_fun, name):
     epsilons = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0]
     rng = np.random.default_rng()
     lines = []
-    for params in params_generator(rng):
+    for params in params_generator():
         sample = loc_scale_dist_fun(rng, params["loc"], params["scale"], params["size"])
         sample = np.abs(sample)
-        U = sample.max()
-        comparisons = compare_on(sample, epsilons, U, rng)
-        for comparison in comparisons:
-            line = dict(**params, **comparison, U=U, distribution=name)
-            print(line)
-            lines.append(line)
+        for U in [
+            np.percentile(sample, 80),
+            np.percentile(sample, 90),
+            np.percentile(sample, 95),
+            sample.max(),
+        ]:
+            comparisons = compare_on(sample, epsilons, U, rng)
+            for comparison in comparisons:
+                line = dict(**params, **comparison, U=U, distribution=name)
+                print(line)
+                lines.append(line)
     df = pd.DataFrame(lines)
     df.to_csv("comparison_{}.csv".format(name))
 
