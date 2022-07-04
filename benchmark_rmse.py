@@ -67,14 +67,15 @@ def benchmark(sample_params: SampleParameters) -> BenchmarkResults:
     results = []
     for epsilon in [0.01, 0.1, 1.0, 10]:
         for _ in range(n_repetitions):
-            hyperparams = dict(
-                epsilon=epsilon,
-                U=sampl.max(),
-            )
-            result = _benchmark(sampl, hyperparams)
-            result = result.assign(**sample_params, **hyperparams)
-            print(result)
-            results.append(result)
+            for U in [np.percentile(sampl, q) for q in [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]]:
+                hyperparams = dict(
+                    epsilon=epsilon,
+                    U=U,
+                )
+                result = _benchmark(sampl, hyperparams)
+                result = result.assign(**sample_params, **hyperparams)
+                print(result)
+                results.append(result)
     return pd.concat(results)
 
 
