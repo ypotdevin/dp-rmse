@@ -18,4 +18,4 @@ Averaged over the locations and scales, the approximation quality of our impleme
 Performing some rank correlation analysis yields, that picking `q=1.0` (i.e. the maximum) for $U$, usually leads to the best results. This then leads to the following compressed [Table 3](table_3.md), which shows only the `q=1.0` lines of [Table 2](table_2.md).
 
 # Reproducability
-The raw data may be (up to randomness) reproduced via [benchmark_rmse.py](benchmark_rmse.py) and the aggregation of the resulting data may be reproduced by [benchmark_aggregation.ipynb](benchmark_aggregation.ipynb).
+The raw data ([benchmark.csv](benchmark.csv)) may be (up to randomness) reproduced via [benchmark_rmse.py](benchmark_rmse.py) and the aggregation of the resulting data may be reproduced by [benchmark_aggregation.ipynb](benchmark_aggregation.ipynb).
