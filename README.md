@@ -14,3 +14,5 @@ upper bounds $U$ ranging from 0.5 to 1.0 percentiles (in steps of 0.1),
 we estimated the DP rMSE 10 times and show the statistics in [Table 1](table_1.md).
 
 Averaged over the locations and scales, the approximation quality of our implementation is shown in [Table 2](table_2.md).
+
+Performing some rank correlation analysis yields, that picking `q=1.0` (i.e. the maximum) for $U$, usually leads to the best results. This then leads to the following compressed [Table 3](table_3.md), which shows only the `q=1.0` lines of [Table 2](table_2.md).
