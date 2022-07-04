@@ -1,4 +1,21 @@
-| distribution   |    $\mu$ |    $\sigma$ |   $n$ |   $\epsilon$ | $U$   |             rMSE |   mean of DP-rMSE |   rel. std of DP-rMSE |               min |               25% |               50% |               75% |              max |
+| column          | meaning |
+|-----------------|---------|
+| distribution    | the distribution to draw samples from |
+| $\mu$           | location of the sample's distribution |
+| $\sigma$        | scale of the samples's distribution |
+| $n$             | size of the sample |
+| $\epsilon$      | privacy budget |
+| $U$             | upper bound on the errors (hyperparameter of our implementation; errors larger than $U$ are clipped before processing) |
+| rMSE            | the true, non-private sample root-mean-square (rMSE) |
+| mean of DP-rMSE | the average value of the differentially private estimation, collected from 10 i.i.d. runs of our algorithm |
+| CoV of DP-rMSE  | the coefficient of variation ($\frac{\text{std}}{\text{mean}}$) of our estimation, among the 10 i.i.d. runs of our algorithm |
+| min             | the minimum estimated rMSE |
+| 25%             | the 25% percentile of the estimated rMSE values |
+| 50%             | the median of the estimated rMSE values |
+| 75%             | the 75% percentile of the estimated rMSE values |
+| max             | the maximum estimated rMSE |
+
+| distribution   |    $\mu$ |    $\sigma$ |   $n$ |   $\epsilon$ | $U$   |             rMSE |   mean of DP-rMSE |   coefficient of variation |               min |               25% |               50% |               75% |              max |
 |----------------|----------|-------------|-------|--------------|-------|------------------|-------------------|-----------------------|-------------------|-------------------|-------------------|-------------------|------------------|
 | laplace        |    0     |      1      |    10 |         0.01 | q=0.5 |      1.3915      |       0.83957     |           4.90589     |      -3.57641     |      -2.05907     |       0.266116    |       1.57722     |     10.7086      |
 | laplace        |    0     |      1      |    10 |         0.01 | q=0.6 |      1.3915      |      -1.38709     |          -7.87313     |     -21.6887      |      -8.6872      |      -1.81718     |       4.30603     |     18.7822      |
